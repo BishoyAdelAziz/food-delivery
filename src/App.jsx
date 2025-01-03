@@ -1,28 +1,31 @@
-import { useState } from "react";
+import { Suspense, lazy } from "react";
 import Navbar from "./Components/Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
-import Home from "./Pages/Home/Home";
-import Cart from "./Pages/Cart/Cart";
-import Placeorder from "./Pages/PlaceOrder/Placeorder";
 import Footer from "./Components/Footer/Footer";
-import LoginPopop from "./Components/LoginPopop/LoginPopop";
-
 const App = () => {
-  const [showLogin, setShowLogin] = useState(false);
+  const Home = lazy(() => import(`./Pages/Home/Home`));
+  const Cart = lazy(() => import("./Pages/Cart/Cart"));
+  const PlaceOrder = lazy(() => import("./Pages/PlaceOrder/Placeorder"));
+  const User = lazy(() => import("./Components/FormModals/UserForm"));
+  const Login = lazy(() =>
+    import("./Components/FormModals/LoginPop/LoginPopop")
+  );
+  const Signup = lazy(() => import("./Components/FormModals/SignupPop/Signup"));
   return (
     <>
-      {showLogin ? (
-        <LoginPopop setShowLogin={setShowLogin} showLogin={showLogin} />
-      ) : (
-        <></>
-      )}
       <div className="App">
-        <Navbar setShowLogin={setShowLogin} showLogin={showLogin} />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Cart" element={<Cart />} />
-          <Route path="/order" element={<Placeorder />} />
-        </Routes>
+        <Navbar />
+        <Suspense fallback={<div>Loading..</div>}>
+          <Routes>
+            <Route index element={<Home />} />
+            <Route path="/user" element={<User />}>
+              <Route path="/user/Login" element={<Login />} />
+              <Route path="/user/Signup" element={<Signup />} />
+            </Route>
+            <Route path="/Cart" element={<Cart />} />
+            <Route path="/order" element={<PlaceOrder />} />
+          </Routes>
+        </Suspense>
       </div>
       <Footer />
     </>
