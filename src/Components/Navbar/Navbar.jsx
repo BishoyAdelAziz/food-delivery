@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import "./Navbar.css";
 import { assets } from "../../assets/assets";
 import { Link } from "react-router-dom";
 import { StoreContext } from "../../Context/Storecontext";
-function Navbar({ setShowLogin, showLogin }) {
+function Navbar() {
   const [Menu, setMenu] = useState("Contact-US");
   const { getTotalCartAmount } = useContext(StoreContext);
-
   return (
     <div className="Navbar">
       <Link to={"/"}>
@@ -50,7 +49,9 @@ function Navbar({ setShowLogin, showLogin }) {
           </Link>
           <div className={getTotalCartAmount() > 0 ? "dot" : "hide"}></div>
         </div>
-        <button onClick={() => setShowLogin(!showLogin)}>Sign-In</button>
+        <button>
+          <Link to={"/user/Login"}>Sign-In</Link>
+        </button>
       </div>
     </div>
   );
